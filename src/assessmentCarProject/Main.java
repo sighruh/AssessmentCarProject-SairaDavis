@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
-	public static ArrayList<Car> loadCars(String filename) { 
-		//Loads all cars from CSV file
+	public static ArrayList<Car> loadCars(String filename) {
+		// Loads all cars from CSV file
 		ArrayList<Car> cars = new ArrayList<>();
 		try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
 			String line;
@@ -38,13 +38,13 @@ public class Main {
 					// This creates a car using the information from the row
 					cars.add(car);
 
-				} catch (Exception e) { // Skips any invalid numbers 
+				} catch (Exception e) { // Skips any invalid numbers
 					System.out.println("Skipping malformed row: ");
 				}
 
 			}
 
-		} catch (IOException e) { 
+		} catch (IOException e) {
 			System.out.println("Could not open file: "); // Displays when file is not opening
 		}
 
@@ -100,7 +100,7 @@ public class Main {
 		return -1; // not found
 	}
 
-	public static void searchCarsByYear(ArrayList<Car> working, int targetYear) { // Displays every car requested 
+	public static void searchCarsByYear(ArrayList<Car> working, int targetYear) { // Displays every car requested
 		int foundIndex = binarySearchByYear(working, targetYear);
 
 		if (foundIndex == -1) {
@@ -114,7 +114,7 @@ public class Main {
 			first--;
 		}
 
-		int i = first; // All cars with the requested year 
+		int i = first; // All cars with the requested year
 
 		while (i < working.size() && working.get(i).getYear() == targetYear) {
 			System.out.println(working.get(i));
