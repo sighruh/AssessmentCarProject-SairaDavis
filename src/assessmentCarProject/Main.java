@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 	public static ArrayList<Car> loadCars(String filename) {
@@ -64,7 +65,7 @@ public class Main {
 		for (int i = 0; i < 10; i++) {
 			System.out.println(working.get(i));
 		}
-		//
+		runMenu(working);
 	}
 
 	public static void insertionSortByYear(ArrayList<Car> working) { // Sorts cars in order by year
@@ -119,6 +120,93 @@ public class Main {
 		while (i < working.size() && working.get(i).getYear() == targetYear) {
 			System.out.println(working.get(i));
 			i++;
+		}
+	}
+
+	public static void displayStats(ArrayList<Car> working) {
+		double totalMileage = 0.0;
+
+		String[] fuelTypes = new String[working.size()];
+		int[] fuelCounts = new int[working.size()];
+
+		int numberOfFuelTypes = 0;
+
+		for (int i = 0; i < working.size(); i++) {
+			Car car = working.get(i);
+
+			totalMileage = totalMileage + car.getMileage_kmpl();
+
+			String fuel = car.getFuel_Type();
+			boolean found = false;
+
+			for (int j = 0; j < numberOfFuelTypes; j++) {
+				if (fuelTypes[j].equalsIgnoreCase(fuel)) {
+					fuelCounts[j]++;
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				fuelTypes[numberOfFuelTypes] = fuel;
+				fuelCounts[numberOfFuelTypes] = 1;
+				numberOfFuelTypes++;
+			}
+		}
+
+		double averageMileage = totalMileage / working.size();
+		System.out.printf("Average mileage: %.2f km/l%n", averageMileage);
+		System.out.println("\nCars by fuel type: ");
+
+		for (int i = 0; i < numberOfFuelTypes; i++) {
+			System.out.println(fuelTypes[i] + ": " + fuelCounts[i]);
+		}
+	}
+
+	public static void runMenu(ArrayList<Car> working) {
+		try (Scanner scanner = new Scanner(System.in)) {
+			boolean running = true;
+
+			while (running) {
+				System.out.println("\n---- Car Menu ----");
+				System.out.println("1. Sort cars by Year");
+				System.out.println("2. Search for the cars by Year");
+				System.out.println("3. Display stats");
+				System.out.println("4. Exit Menu");
+				System.out.println("Choose an option: ");
+
+				int choice = scanner.nextInt();
+
+				if (choice == 1) {
+					insertionSortByYear(working);
+
+					System.out.println("\nFirst 10 cars sorted by year: ");
+					for (int i = 0; i < 10; i++) {
+						System.out.println(working.get(i));
+					}
+				} else if (choice == 2) {
+					System.out.println("Input year to search: ");
+
+					if (!scanner.hasNextInt()) {
+						System.out.println("Error. Invalid year.");
+						scanner.nextLine();
+						continue;
+					}
+
+					int targetYear = scanner.nextInt();
+					searchCarsByYear(working, targetYear);
+
+				} else if (choice == 3) {
+					displayStats(working);
+
+				} else if (choice == 4) {
+					running = false;
+					System.out.println("Exiting program.");
+
+				} else {
+					System.out.println("Invalid option. Please try again.");
+				}
+			}
 		}
 	}
 
