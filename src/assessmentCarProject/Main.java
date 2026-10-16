@@ -73,11 +73,11 @@ public class Main {
 			Car temp = working.get(i);
 			int j = i - 1;
 
-			while (j >= 0 && working.get(j).getYear() > temp.getYear()) { // Temp variable
+			while (j >= 0 && working.get(j).getYear() > temp.getYear()) { 
 				working.set(j + 1, working.get(j));
-				j--;
+				j--; // Moves through the list
 			}
-			working.set(j + 1, temp);
+			working.set(j + 1, temp); // Places car in correct position
 		}
 	}
 
@@ -86,15 +86,15 @@ public class Main {
 		int high = working.size() - 1;
 
 		while (low <= high) {
-			int mid = (high + low) / 2;
+			int mid = (high + low) / 2; // Finds middle index
 			int midYear = working.get(mid).getYear();
 
 			if (midYear == targetYear) {
 				return mid;
 			} else if (midYear < targetYear) {
-				low = mid + 1;
+				low = mid + 1; // Searches right half 
 			} else {
-				high = mid - 1;
+				high = mid - 1; // Searches left half
 			}
 		}
 
@@ -123,10 +123,10 @@ public class Main {
 		}
 	}
 
-	public static void displayStats(ArrayList<Car> working) {
+	public static void displayStats(ArrayList<Car> working) { // Calculates average mileage
 		double totalMileage = 0.0;
 
-		String[] fuelTypes = new String[working.size()];
+		String[] fuelTypes = new String[working.size()]; // Stores each fuel type and counts them
 		int[] fuelCounts = new int[working.size()];
 
 		int numberOfFuelTypes = 0;
@@ -134,40 +134,40 @@ public class Main {
 		for (int i = 0; i < working.size(); i++) {
 			Car car = working.get(i);
 
-			totalMileage = totalMileage + car.getMileage_kmpl();
+			totalMileage = totalMileage + car.getMileage_kmpl(); // Adds current car to the total mileage 
 
-			String fuel = car.getFuel_Type();
-			boolean found = false;
+			String fuel = car.getFuel_Type(); // Current fuel type
+			boolean found = false; // Checks if type already exists
 
-			for (int j = 0; j < numberOfFuelTypes; j++) {
-				if (fuelTypes[j].equalsIgnoreCase(fuel)) {
+			for (int j = 0; j < numberOfFuelTypes; j++) { // Searches existing fuel types 
+				if (fuelTypes[j].equalsIgnoreCase(fuel)) { // Ignores lowercase/uppercass differences
 					fuelCounts[j]++;
 					found = true;
-					break;
+					break; // Stops searching for specific fuel type
 				}
 			}
 
-			if (!found) {
+			if (!found) { // Records new fuel type
 				fuelTypes[numberOfFuelTypes] = fuel;
 				fuelCounts[numberOfFuelTypes] = 1;
 				numberOfFuelTypes++;
 			}
 		}
 
-		double averageMileage = totalMileage / working.size();
+		double averageMileage = totalMileage / working.size(); // Calculates average mileage of all cars
 		System.out.printf("Average mileage: %.2f km/l%n", averageMileage);
 		System.out.println("\nCars by fuel type: ");
 
-		for (int i = 0; i < numberOfFuelTypes; i++) {
+		for (int i = 0; i < numberOfFuelTypes; i++) { // Displays each fuel type and count
 			System.out.println(fuelTypes[i] + ": " + fuelCounts[i]);
 		}
 	}
 
-	public static void runMenu(ArrayList<Car> working) {
+	public static void runMenu(ArrayList<Car> working) { // Displays menu and records user choices
 		try (Scanner scanner = new Scanner(System.in)) {
-			boolean running = true;
+			boolean running = true; // Helps keep menu running
 
-			while (running) {
+			while (running) { // Will repeat until the exit choice is inputed
 				System.out.println("\n---- Car Menu ----");
 				System.out.println("1. Sort cars by Year");
 				System.out.println("2. Search for the cars by Year");
@@ -178,7 +178,7 @@ public class Main {
 				int choice = scanner.nextInt();
 
 				if (choice == 1) {
-					insertionSortByYear(working);
+					insertionSortByYear(working); // Sorts cars by year
 
 					System.out.println("\nFirst 10 cars sorted by year: ");
 					for (int i = 0; i < 10; i++) {
@@ -187,23 +187,23 @@ public class Main {
 				} else if (choice == 2) {
 					System.out.println("Input year to search: ");
 
-					if (!scanner.hasNextInt()) {
+					if (!scanner.hasNextInt()) { // For invalid inputed numbers
 						System.out.println("Error. Invalid year.");
 						scanner.nextLine();
 						continue;
 					}
 
 					int targetYear = scanner.nextInt();
-					searchCarsByYear(working, targetYear);
+					searchCarsByYear(working, targetYear); // Looks for and displays cars from year
 
 				} else if (choice == 3) {
-					displayStats(working);
+					displayStats(working); // Displays car stats 
 
-				} else if (choice == 4) {
+				} else if (choice == 4) { // Ends menu loop
 					running = false;
 					System.out.println("Exiting program.");
 
-				} else {
+				} else { // For invalid numbers
 					System.out.println("Invalid option. Please try again.");
 				}
 			}
